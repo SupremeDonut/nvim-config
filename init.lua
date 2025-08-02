@@ -380,7 +380,7 @@ require('lazy').setup({
     event = 'VeryLazy',
     opts = {
       builtin_marks = { "'", '"', '^', '.', '<', '>', '[', ']' },
-      sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
+      sign_priority = { lower = 2, upper = 3, builtin = 1, bookmark = 4 },
     },
   },
   -- INFO: Treesitter stuff
@@ -490,6 +490,9 @@ require('lazy').setup({
   {
     'lewis6991/gitsigns.nvim',
     opts = {
+      signcolumn = false,
+      numhl = true,
+      current_line_blame = true,
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'
 
@@ -503,6 +506,7 @@ require('lazy').setup({
           if vim.wo.diff then
             vim.cmd.normal { ']c', bang = true }
           else
+            ---@diagnostic disable-next-line: param-type-mismatch
             gitsigns.nav_hunk 'next'
           end
         end, { desc = 'Jump to next git [c]hange' })
@@ -511,6 +515,7 @@ require('lazy').setup({
           if vim.wo.diff then
             vim.cmd.normal { '[c', bang = true }
           else
+            ---@diagnostic disable-next-line: param-type-mismatch
             gitsigns.nav_hunk 'prev'
           end
         end, { desc = 'Jump to previous git [c]hange' })
@@ -527,15 +532,15 @@ require('lazy').setup({
         map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
         map('n', '<leader>hu', gitsigns.stage_hunk, { desc = 'git [u]ndo stage hunk' })
         map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
-        map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
+        map('n', '<leader>hp', gitsigns.preview_hunk_inline, { desc = 'git [p]review hunk' })
         map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
         map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
         map('n', '<leader>hD', function()
+          ---@diagnostic disable-next-line: param-type-mismatch
           gitsigns.diffthis '@'
         end, { desc = 'git [D]iff against last commit' })
 
-        map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
-        map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
+        map({ 'o', 'x' }, 'ih', gitsigns.select_hunk)
       end,
     },
   },
@@ -608,12 +613,6 @@ require('lazy').setup({
                 vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
               end,
             })
-          end
-
-          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            map('<leader>th', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
           end
         end,
       })
