@@ -25,6 +25,9 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
 vim.o.expandtab = true
+vim.o.title = true
+vim.o.titlelen = 0
+vim.o.titlestring = 'nvim %{expand("%:p:t")}'
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -256,6 +259,7 @@ require('lazy').setup({
           vim.cmd [[hi FloatBorder guibg=NONE]]
           vim.cmd [[hi SignColumn guibg=NONE]]
           vim.cmd [[hi LineNr guibg=NONE]]
+          vim.cmd [[hi LspInlayHint guibg=NONE]]
         end,
       })
     end,
@@ -614,6 +618,12 @@ require('lazy').setup({
               end,
             })
           end
+
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+            map('<leader>ci', function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            end, 'Toggle [I]nlay Hints')
+          end
         end,
       })
 
@@ -648,10 +658,13 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua',
-        'black',
+        'lua_ls',
         'prettier',
         'debugpy',
+        'pyright',
         'ruff',
+        'jdtls',
+        'rust_analyzer',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -737,6 +750,10 @@ require('lazy').setup({
           draw = { treesitter = { 'lsp' } },
         },
         ghost_text = { enabled = true },
+      },
+
+      cmdline = {
+        completion = { menu = { auto_show = true } },
       },
 
       sources = {
