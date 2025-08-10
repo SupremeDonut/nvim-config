@@ -269,6 +269,17 @@ require('lazy').setup({
     end,
   },
   {
+    'catgoose/nvim-colorizer.lua',
+    event = 'BufReadPre',
+    opts = {
+      lazy_load = true,
+      user_default_options = {
+        names = false,
+        css = true,
+      },
+    },
+  },
+  {
     'chrisgrieser/nvim-origami',
     event = 'VeryLazy',
     opts = { foldtext = { lineCount = { template = '  󰘖 %d  ' } } },
