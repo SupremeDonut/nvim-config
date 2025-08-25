@@ -236,7 +236,6 @@ require('lazy').setup({
     opts = { indent = { char = '▏' }, exclude = { filetypes = { 'dashboard' } } },
   },
   'AhmedAbdulrahman/aylin.vim',
-  'webhooked/kanso.nvim',
   'ribru17/bamboo.nvim',
   {
     'rose-pine/neovim',
@@ -451,17 +450,17 @@ require('lazy').setup({
     end,
   },
   -- INFO: markdown and notes stuff
-  -- {
-  --   'OXY2DEV/markview.nvim',
-  --   config = function()
-  --     local presets = require 'markview.presets'
-  --     require('markview').setup {
-  --       experimental = { check_rtp_message = false },
-  --       markdown = { tables = presets.tables.single },
-  --       typst = { enable = false },
-  --     }
-  --   end,
-  -- },
+  {
+    'OXY2DEV/markview.nvim',
+    config = function()
+      local presets = require 'markview.presets'
+      require('markview').setup {
+        experimental = { check_rtp_message = false },
+        markdown = { tables = presets.tables.single },
+        typst = { enable = false },
+      }
+    end,
+  },
   {
     'echaya/neowiki.nvim',
     opts = {
@@ -477,11 +476,13 @@ require('lazy').setup({
   },
   {
     'chomosuke/typst-preview.nvim',
-    lazy = false,
+    ft = 'typst',
     version = '1.*',
     opts = {},
     config = function()
-      vim.api.nvim_create_user_command('TypstCompile', '!typst compile %:p', {})
+      vim.api.nvim_create_user_command('TypstCompile', function(opts)
+        vim.cmd('!typst compile %:p ' .. opts.args)
+      end, { nargs = '?' })
     end,
   },
   {
@@ -944,7 +945,13 @@ require('lazy').setup({
       require('mini.ai').setup { n_lines = 500 }
       require('mini.surround').setup()
       require('mini.move').setup()
-      require('mini.pairs').setup()
+      require('mini.pairs').setup {
+        mappings = {
+          ['"'] = false,
+          ["'"] = false,
+          ['`'] = false,
+        },
+      }
     end,
   },
   {
