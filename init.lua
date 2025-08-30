@@ -92,6 +92,9 @@ require('lazy').setup({
   -- INFO: Theming stuff
   {
     'folke/snacks.nvim',
+    cond = function()
+      return not vim.g.vscode
+    end,
     opts = {
       dashboard = {
         preset = {
@@ -231,6 +234,9 @@ require('lazy').setup({
   },
   {
     'lukas-reineke/indent-blankline.nvim',
+    cond = function()
+      return not vim.g.vscode
+    end,
     event = 'VeryLazy',
     main = 'ibl',
     opts = { indent = { char = '▏' }, exclude = { filetypes = { 'dashboard' } } },
@@ -578,6 +584,9 @@ require('lazy').setup({
   },
   {
     'neovim/nvim-lspconfig',
+    cond = function()
+      return not vim.g.vscode
+    end,
     event = 'VeryLazy',
     dependencies = {
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
@@ -725,6 +734,9 @@ require('lazy').setup({
   },
   {
     'saghen/blink.cmp',
+    cond = function()
+      return not vim.g.vscode
+    end,
     event = 'VimEnter',
     version = '1.*',
     dependencies = {
