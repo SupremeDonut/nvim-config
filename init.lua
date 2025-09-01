@@ -92,9 +92,6 @@ require('lazy').setup({
   -- INFO: Theming stuff
   {
     'folke/snacks.nvim',
-    cond = function()
-      return not vim.g.vscode
-    end,
     opts = {
       dashboard = {
         preset = {
@@ -234,18 +231,13 @@ require('lazy').setup({
   },
   {
     'lukas-reineke/indent-blankline.nvim',
-    cond = function()
-      return not vim.g.vscode
-    end,
     event = 'VeryLazy',
     main = 'ibl',
     opts = { indent = { char = '▏' }, exclude = { filetypes = { 'dashboard' } } },
   },
-  'AhmedAbdulrahman/aylin.vim',
-  'ribru17/bamboo.nvim',
   {
-    'rose-pine/neovim',
-    name = 'rose-pine',
+    'folke/tokyonight.nvim',
+    transparent = true,
   },
   {
     'catppuccin/nvim',
@@ -270,7 +262,6 @@ require('lazy').setup({
     end,
     config = function()
       vim.cmd.colorscheme 'catppuccin-mocha'
-      -- vim.cmd.colorscheme 'rose-pine-moon'
     end,
   },
   {
@@ -584,9 +575,6 @@ require('lazy').setup({
   },
   {
     'neovim/nvim-lspconfig',
-    cond = function()
-      return not vim.g.vscode
-    end,
     event = 'VeryLazy',
     dependencies = {
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
@@ -734,9 +722,6 @@ require('lazy').setup({
   },
   {
     'saghen/blink.cmp',
-    cond = function()
-      return not vim.g.vscode
-    end,
     event = 'VimEnter',
     version = '1.*',
     dependencies = {
@@ -937,7 +922,7 @@ require('lazy').setup({
       spec = {
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
-        { '<leader>r', group = '[R]ename' },
+        { '<leader>r', group = '[R]un' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
@@ -952,18 +937,21 @@ require('lazy').setup({
     opts = { signs = false },
   },
   {
-    'echasnovski/mini.nvim',
+    'nvim-mini/mini.nvim',
+    cond = true,
     config = function()
       require('mini.ai').setup { n_lines = 500 }
       require('mini.surround').setup()
       require('mini.move').setup()
-      require('mini.pairs').setup {
-        mappings = {
-          ['"'] = false,
-          ["'"] = false,
-          ['`'] = false,
-        },
-      }
+      if not vim.g.vscode then
+        require('mini.pairs').setup {
+          mappings = {
+            ['"'] = false,
+            ["'"] = false,
+            ['`'] = false,
+          },
+        }
+      end
     end,
   },
   {
@@ -1067,6 +1055,11 @@ require('lazy').setup({
       task = '📌',
       lazy = '💤 ',
     },
+  },
+  defaults = {
+    cond = function()
+      return not vim.g.vscode
+    end,
   },
 })
 
