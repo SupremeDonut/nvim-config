@@ -78,6 +78,15 @@ vim.api.nvim_create_autocmd('BufRead', {
   end,
 })
 
+-- set spell on specific filetypes
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'text', 'typst', 'markdown' },
+  callback = function()
+    vim.opt_local.spell = true
+  end,
+  desc = 'Enable spellcheck for specific files',
+})
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -925,7 +934,7 @@ require('lazy').setup({
       spec = {
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
-        { '<leader>r', group = '[R]ename' },
+        { '<leader>r', group = '[R]un' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
