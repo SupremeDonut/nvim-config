@@ -244,11 +244,9 @@ require('lazy').setup({
     main = 'ibl',
     opts = { indent = { char = '▏' }, exclude = { filetypes = { 'dashboard' } } },
   },
-  'AhmedAbdulrahman/aylin.vim',
-  'ribru17/bamboo.nvim',
   {
-    'rose-pine/neovim',
-    name = 'rose-pine',
+    'folke/tokyonight.nvim',
+    transparent = true,
   },
   {
     'catppuccin/nvim',
@@ -273,7 +271,6 @@ require('lazy').setup({
     end,
     config = function()
       vim.cmd.colorscheme 'catppuccin-mocha'
-      -- vim.cmd.colorscheme 'rose-pine-moon'
     end,
   },
   {
@@ -949,18 +946,21 @@ require('lazy').setup({
     opts = { signs = false },
   },
   {
-    'echasnovski/mini.nvim',
+    'nvim-mini/mini.nvim',
+    cond = true,
     config = function()
       require('mini.ai').setup { n_lines = 500 }
       require('mini.surround').setup()
       require('mini.move').setup()
-      require('mini.pairs').setup {
-        mappings = {
-          ['"'] = false,
-          ["'"] = false,
-          ['`'] = false,
-        },
-      }
+      if not vim.g.vscode then
+        require('mini.pairs').setup {
+          mappings = {
+            ['"'] = false,
+            ["'"] = false,
+            ['`'] = false,
+          },
+        }
+      end
     end,
   },
   {
@@ -1064,6 +1064,11 @@ require('lazy').setup({
       task = '📌',
       lazy = '💤 ',
     },
+  },
+  defaults = {
+    cond = function()
+      return not vim.g.vscode
+    end,
   },
 })
 
