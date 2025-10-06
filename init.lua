@@ -477,15 +477,6 @@ require('lazy').setup({
     ft = { 'markdown' },
   },
   {
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    build = 'cd app && yarn install',
-    init = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
-    end,
-    ft = { 'markdown' },
-  },
-  {
     'echaya/neowiki.nvim',
     opts = {
       wiki_dirs = {
@@ -971,13 +962,7 @@ require('lazy').setup({
       require('mini.surround').setup()
       require('mini.move').setup()
       if not vim.g.vscode then
-        require('mini.pairs').setup {
-          mappings = {
-            ['"'] = false,
-            ["'"] = false,
-            ['`'] = false,
-          },
-        }
+        require('mini.pairs').setup()
       end
     end,
   },
