@@ -692,6 +692,7 @@ require('lazy').setup({
         'ruff',
         'jdtls',
         'rust_analyzer',
+        'clangd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -1042,7 +1043,7 @@ require('lazy').setup({
   {
     'CRAG666/code_runner.nvim',
     lazy = true,
-    opts = { filetype = { python = 'py $fileName' } },
+    opts = { filetype = { python = 'python $fileName' } },
     keys = {
       { '<leader>rr', ':RunCode<CR>', desc = 'Run Code' },
       { '<leader>rf', ':RunFile<CR>', desc = 'Run File' },
