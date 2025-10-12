@@ -245,10 +245,6 @@ require('lazy').setup({
     opts = { indent = { char = '▏' }, exclude = { filetypes = { 'dashboard' } } },
   },
   {
-    'folke/tokyonight.nvim',
-    transparent = true,
-  },
-  {
     'catppuccin/nvim',
     priority = 1000,
     opts = {
@@ -475,19 +471,6 @@ require('lazy').setup({
       vim.g.mkdp_filetypes = { 'markdown' }
     end,
     ft = { 'markdown' },
-  },
-  {
-    'echaya/neowiki.nvim',
-    opts = {
-      wiki_dirs = {
-        { name = 'School', path = '~/Notes' },
-      },
-    },
-    keys = {
-      { '<leader>ww', "<cmd>lua require('neowiki').open_wiki()<cr>", desc = 'Open Wiki' },
-      { '<leader>wW', "<cmd>lua require('neowiki').open_wiki_floating()<cr>", desc = 'Open Floating Wiki' },
-      { '<leader>wT', "<cmd>lua require('neowiki').open_wiki_new_tab()<cr>", desc = 'Open Wiki in Tab' },
-    },
   },
   {
     'chomosuke/typst-preview.nvim',
@@ -723,7 +706,7 @@ require('lazy').setup({
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -897,6 +880,13 @@ require('lazy').setup({
       dap.listeners.before.event_exited['dapui_config'] = dapui.close
     end,
   },
+  -- INFO: ai stuff
+  {
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    opts = {},
+  },
   -- INFO: other utilities
   { 'NMAC427/guess-indent.nvim', opts = {} },
   {
@@ -1032,13 +1022,6 @@ require('lazy').setup({
         },
       }
     end,
-  },
-  {
-    'yorickpeterse/nvim-window',
-    opts = {},
-    keys = {
-      { ',', '<cmd>lua require("nvim-window").pick()<CR>', desc = 'Jump to window' },
-    },
   },
   {
     'CRAG666/code_runner.nvim',
