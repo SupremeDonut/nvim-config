@@ -430,10 +430,6 @@ require('lazy').setup({
     'Bekaboo/dropbar.nvim',
     config = function()
       local dropbar_trunc = require 'dropbar_trunc'
-      local dropbar_api = require 'dropbar.api'
-
-      vim.keymap.set({ 'n', 'v' }, '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
-      vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
 
       require('dropbar.configs').set {
         bar = {
@@ -850,8 +846,6 @@ require('lazy').setup({
           'python',
         },
       }
-      dapui.setup {}
-
       vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
       vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
       local breakpoint_icons = vim.g.have_nerd_font
@@ -885,7 +879,12 @@ require('lazy').setup({
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     event = 'InsertEnter',
-    opts = {},
+    config = function()
+      require('copilot').setup {
+        panel = { auto_refresh = true },
+      }
+      require 'copilot_grimoire'
+    end,
   },
   -- INFO: other utilities
   { 'NMAC427/guess-indent.nvim', opts = {} },
