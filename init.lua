@@ -346,10 +346,8 @@ require('lazy').setup({
 
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
@@ -376,9 +374,9 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>fb', '<cmd>Telescope file_browser<CR>', { desc = 'Telescope [F]ile [B]rowser' })
 
       local custom_pickers = require 'custom_pickers'
+      vim.keymap.set('n', '<leader>fe', custom_pickers.emoji_picker, { desc = '[F]ind [E]mojis' })
       vim.keymap.set('n', '<leader>fm', custom_pickers.math_picker, { desc = '[F]ind [M]ath Symbols' })
       vim.keymap.set('n', '<leader>fn', custom_pickers.nerd_picker, { desc = '[F]ind [N]erd Font Symbols' })
-      vim.keymap.set('n', '<leader>fe', custom_pickers.emoji_picker, { desc = '[F]ind [E]mojis' })
       vim.keymap.set('n', '<leader>ft', custom_pickers.typst_picker, { desc = '[F]ind [T]ypst Symbols' })
     end,
   },
@@ -590,8 +588,8 @@ require('lazy').setup({
           map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
           map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
           map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          map('<leader>cs', require('telescope.builtin').lsp_document_symbols, 'Document [S]ymbols')
+          map('<leader>cw', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace Symols')
           map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -770,105 +768,101 @@ require('lazy').setup({
       signature = { enabled = true },
     },
   },
-  {
-    'mfussenegger/nvim-dap',
-    dependencies = {
-      'rcarriga/nvim-dap-ui',
-      'nvim-neotest/nvim-nio',
-      'williamboman/mason.nvim',
-      'jay-babu/mason-nvim-dap.nvim',
-    },
-    keys = {
-      {
-        '<F5>',
-        function()
-          require('dap').continue()
-        end,
-        desc = 'Debug: Start/Continue',
-      },
-      {
-        '<F1>',
-        function()
-          require('dap').step_into()
-        end,
-        desc = 'Debug: Step Into',
-      },
-      {
-        '<F2>',
-        function()
-          require('dap').step_over()
-        end,
-        desc = 'Debug: Step Over',
-      },
-      {
-        '<F3>',
-        function()
-          require('dap').step_out()
-        end,
-        desc = 'Debug: Step Out',
-      },
-      {
-        '<leader>b',
-        function()
-          require('dap').toggle_breakpoint()
-        end,
-        desc = 'Debug: Toggle Breakpoint',
-      },
-      {
-        '<leader>B',
-        function()
-          require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-        end,
-        desc = 'Debug: Set Breakpoint',
-      },
-      {
-        '<F6>',
-        function()
-          require('dapui').toggle()
-        end,
-        desc = 'Debug: See last session result.',
-      },
-    },
-    config = function()
-      local dap = require 'dap'
-      local dapui = require 'dapui'
-
-      require('mason-nvim-dap').setup {
-        automatic_installation = true,
-        handlers = {},
-        ensure_installed = {
-          'delve',
-          'python',
-        },
-      }
-      vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-      vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-      local breakpoint_icons = vim.g.have_nerd_font
-          and {
-            Breakpoint = '',
-            BreakpointCondition = '',
-            BreakpointRejected = '',
-            LogPoint = '',
-            Stopped = '',
-          }
-        or {
-          Breakpoint = '●',
-          BreakpointCondition = '⊜',
-          BreakpointRejected = '⊘',
-          LogPoint = '◆',
-          Stopped = '⭔',
-        }
-      for type, icon in pairs(breakpoint_icons) do
-        local tp = 'Dap' .. type
-        local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-        vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-      end
-
-      dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-      dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-      dap.listeners.before.event_exited['dapui_config'] = dapui.close
-    end,
-  },
+  -- {
+  --   'mfussenegger/nvim-dap',
+  --   dependencies = {
+  --     'rcarriga/nvim-dap-ui',
+  --     'nvim-neotest/nvim-nio',
+  --     'williamboman/mason.nvim',
+  --     'jay-babu/mason-nvim-dap.nvim',
+  --   },
+  --   keys = {
+  --     {
+  --       '<F5>',
+  --       function()
+  --         require('dap').continue()
+  --       end,
+  --       desc = 'Debug: Start/Continue',
+  --     },
+  --     {
+  --       '<F1>',
+  --       function()
+  --         require('dap').step_into()
+  --       end,
+  --       desc = 'Debug: Step Into',
+  --     },
+  --     {
+  --       '<F2>',
+  --       function()
+  --         require('dap').step_over()
+  --       end,
+  --       desc = 'Debug: Step Over',
+  --     },
+  --     {
+  --       '<F3>',
+  --       function()
+  --         require('dap').step_out()
+  --       end,
+  --       desc = 'Debug: Step Out',
+  --     },
+  --     {
+  --       '<leader>b',
+  --       function()
+  --         require('dap').toggle_breakpoint()
+  --       end,
+  --       desc = 'Debug: Toggle Breakpoint',
+  --     },
+  --     {
+  --       '<leader>B',
+  --       function()
+  --         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+  --       end,
+  --       desc = 'Debug: Set Breakpoint',
+  --     },
+  --     {
+  --       '<F6>',
+  --       function()
+  --         require('dapui').toggle()
+  --       end,
+  --       desc = 'Debug: See last session result.',
+  --     },
+  --   },
+  --   config = function()
+  --     local dap = require 'dap'
+  --     local dapui = require 'dapui'
+  --
+  --     require('mason-nvim-dap').setup {
+  --       automatic_installation = true,
+  --       handlers = {},
+  --     }
+  --     vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+  --     vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+  --     local breakpoint_icons = vim.g.have_nerd_font
+  --         and {
+  --           Breakpoint = '',
+  --           BreakpointCondition = '',
+  --           BreakpointRejected = '',
+  --           LogPoint = '',
+  --           Stopped = '',
+  --         }
+  --       or {
+  --         Breakpoint = '●',
+  --         BreakpointCondition = '⊜',
+  --         BreakpointRejected = '⊘',
+  --         LogPoint = '◆',
+  --         Stopped = '⭔',
+  --       }
+  --     for type, icon in pairs(breakpoint_icons) do
+  --       local tp = 'Dap' .. type
+  --       local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+  --       vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
+  --     end
+  --
+  --     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+  --     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+  --     dap.listeners.before.event_exited['dapui_config'] = dapui.close
+  --   end,
+  -- },
   -- INFO: ai stuff
   {
     'zbirenbaum/copilot.lua',
@@ -925,11 +919,12 @@ require('lazy').setup({
       spec = {
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
+        { '<leader>f', group = '[F]ind' },
+        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>r', group = '[R]un' },
         { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>w', group = '[W]orkspace' },
       },
     },
   },
