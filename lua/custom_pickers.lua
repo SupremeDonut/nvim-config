@@ -41,9 +41,9 @@ local base_picker = function(file, title, use_desc)
           actions.select_default:replace(function()
             local selection = action_state.get_selected_entry()
             if use_desc then
-              vim.fn.setreg('*', selection.desc)
+              vim.fn.setreg('+', selection.desc)
             else
-              vim.fn.setreg('*', selection.value)
+              vim.fn.setreg('+', selection.value)
             end
             actions.close(prompt_bufnr)
           end)
