@@ -406,6 +406,7 @@ require('lazy').setup({
       highlight = {
         enable = true,
         additional_vim_regex_highlighting = { 'ruby' },
+        disable = { 'csv' },
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
