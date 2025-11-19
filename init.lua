@@ -541,15 +541,6 @@ require('lazy').setup({
   },
   -- INFO: lsp and dap stuff
   {
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    opts = {
-      library = {
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-      },
-    },
-  },
-  {
     'j-hui/fidget.nvim',
     opts = {
       notification = { window = { border = 'rounded', winblend = 0 } },
@@ -559,10 +550,7 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     event = 'VeryLazy',
     dependencies = {
-      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
-      'mason-org/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       'j-hui/fidget.nvim',
       'saghen/blink.cmp',
@@ -632,42 +620,32 @@ require('lazy').setup({
         virtual_lines = { current_line = true },
         underline = { severity = vim.diagnostic.severity.ERROR },
       }
-
-      local servers = {
-        lua_ls = {
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
-              },
-              diagnostics = { disable = { 'missing-fields' } },
-            },
-          },
-        },
-      }
-
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
+      local ensure_installed = {
         'stylua',
-        'lua_ls',
+        'lua-language-server',
         'prettier',
         'debugpy',
         'pyright',
         'ruff',
         'jdtls',
-        'rust_analyzer',
+        'rust-analyzer',
         'clangd',
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      }
 
-      for server_name, config in pairs(servers) do
-        vim.lsp.config(server_name, config)
+      local installed_package_names = require('mason-registry').get_installed_package_names()
+      for _, v in ipairs(ensure_installed) do
+        if not vim.tbl_contains(installed_package_names, v) then
+          vim.cmd(':MasonInstall ' .. v)
+        end
       end
 
-      require('mason-lspconfig').setup {
-        ensure_installed = {},
-        automatic_enable = true,
-      }
+      local installed_packages = require('mason-registry').get_installed_packages()
+      local installed_lsp_names = vim.iter(installed_packages):fold({}, function(acc, pack)
+        table.insert(acc, pack.spec.neovim and pack.spec.neovim.lspconfig)
+        return acc
+      end)
+
+      vim.lsp.enable(installed_lsp_names)
     end,
   },
   {
