@@ -579,6 +579,7 @@ require('lazy').setup({
       end)
 
       vim.lsp.enable(installed_lsp_names)
+      vim.keymap.set('n', '<leader>cs', '<cmd>LspClangdSwitchSourceHeader<CR>', { desc = 'Switch Source/Header (Clangd)' })
     end,
   },
   {
