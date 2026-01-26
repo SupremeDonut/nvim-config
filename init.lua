@@ -363,12 +363,6 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
 
       vim.keymap.set('n', '<leader>fb', '<cmd>Telescope file_browser<CR>', { desc = 'Telescope [F]ile [B]rowser' })
-
-      local custom_pickers = require 'custom_pickers'
-      vim.keymap.set('n', '<leader>fe', custom_pickers.emoji_picker, { desc = '[F]ind [E]mojis' })
-      vim.keymap.set('n', '<leader>fm', custom_pickers.math_picker, { desc = '[F]ind [M]ath Symbols' })
-      vim.keymap.set('n', '<leader>fn', custom_pickers.nerd_picker, { desc = '[F]ind [N]erd Font Symbols' })
-      vim.keymap.set('n', '<leader>ft', custom_pickers.typst_picker, { desc = '[F]ind [T]ypst Symbols' })
     end,
   },
   {
@@ -392,15 +386,10 @@ require('lazy').setup({
       ensure_installed = {
         'bash',
         'c',
+        'cpp',
         'diff',
-        'html',
         'lua',
         'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
       },
       auto_install = true,
       highlight = {
@@ -431,56 +420,6 @@ require('lazy').setup({
         },
       }
     end,
-  },
-  -- INFO: markdown and notes stuff
-  {
-    'OXY2DEV/markview.nvim',
-    config = function()
-      local presets = require 'markview.presets'
-      require('markview').setup {
-        experimental = { check_rtp_message = false },
-        markdown = { tables = presets.tables.single },
-        typst = { enable = false },
-      }
-    end,
-  },
-  {
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    build = 'cd app && yarn install',
-    init = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
-    end,
-    ft = { 'markdown' },
-  },
-  {
-    'chomosuke/typst-preview.nvim',
-    ft = 'typst',
-    version = '1.*',
-    opts = {},
-    config = function()
-      vim.api.nvim_create_user_command('TypstCompile', function(opts)
-        vim.cmd('!typst compile %:p ' .. opts.args)
-      end, { nargs = '?' })
-    end,
-  },
-  {
-    'pxwg/math-conceal.nvim',
-    event = 'VeryLazy',
-    build = 'make luajit',
-    main = 'math-conceal',
-    opts = {
-      enabled = true,
-      conceal = {
-        'greek',
-        'script',
-        'math',
-        'font',
-        'delim',
-        'phy',
-      },
-      ft = { '*.tex', '*.md', '*.typ' },
-    },
   }, -- INFO: git stuff
   {
     'lewis6991/gitsigns.nvim',
@@ -623,12 +562,6 @@ require('lazy').setup({
       local ensure_installed = {
         'stylua',
         'lua-language-server',
-        'prettier',
-        'debugpy',
-        'pyright',
-        'ruff',
-        'jdtls',
-        'rust-analyzer',
         'clangd',
       }
 
@@ -738,101 +671,6 @@ require('lazy').setup({
       signature = { enabled = true },
     },
   },
-  -- {
-  --   'mfussenegger/nvim-dap',
-  --   dependencies = {
-  --     'rcarriga/nvim-dap-ui',
-  --     'nvim-neotest/nvim-nio',
-  --     'williamboman/mason.nvim',
-  --     'jay-babu/mason-nvim-dap.nvim',
-  --   },
-  --   keys = {
-  --     {
-  --       '<F5>',
-  --       function()
-  --         require('dap').continue()
-  --       end,
-  --       desc = 'Debug: Start/Continue',
-  --     },
-  --     {
-  --       '<F1>',
-  --       function()
-  --         require('dap').step_into()
-  --       end,
-  --       desc = 'Debug: Step Into',
-  --     },
-  --     {
-  --       '<F2>',
-  --       function()
-  --         require('dap').step_over()
-  --       end,
-  --       desc = 'Debug: Step Over',
-  --     },
-  --     {
-  --       '<F3>',
-  --       function()
-  --         require('dap').step_out()
-  --       end,
-  --       desc = 'Debug: Step Out',
-  --     },
-  --     {
-  --       '<leader>b',
-  --       function()
-  --         require('dap').toggle_breakpoint()
-  --       end,
-  --       desc = 'Debug: Toggle Breakpoint',
-  --     },
-  --     {
-  --       '<leader>B',
-  --       function()
-  --         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-  --       end,
-  --       desc = 'Debug: Set Breakpoint',
-  --     },
-  --     {
-  --       '<F6>',
-  --       function()
-  --         require('dapui').toggle()
-  --       end,
-  --       desc = 'Debug: See last session result.',
-  --     },
-  --   },
-  --   config = function()
-  --     local dap = require 'dap'
-  --     local dapui = require 'dapui'
-  --
-  --     require('mason-nvim-dap').setup {
-  --       automatic_installation = true,
-  --       handlers = {},
-  --     }
-  --     vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-  --     vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-  --     local breakpoint_icons = vim.g.have_nerd_font
-  --         and {
-  --           Breakpoint = '',
-  --           BreakpointCondition = '',
-  --           BreakpointRejected = '',
-  --           LogPoint = '',
-  --           Stopped = '',
-  --         }
-  --       or {
-  --         Breakpoint = '●',
-  --         BreakpointCondition = '⊜',
-  --         BreakpointRejected = '⊘',
-  --         LogPoint = '◆',
-  --         Stopped = '⭔',
-  --       }
-  --     for type, icon in pairs(breakpoint_icons) do
-  --       local tp = 'Dap' .. type
-  --       local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-  --       vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-  --     end
-  --
-  --     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-  --     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-  --     dap.listeners.before.event_exited['dapui_config'] = dapui.close
-  --   end,
-  -- },
   -- INFO: ai stuff
   {
     'zbirenbaum/copilot.lua',
@@ -981,17 +819,6 @@ require('lazy').setup({
         },
       }
     end,
-  },
-  {
-    'CRAG666/code_runner.nvim',
-    lazy = true,
-    opts = { filetype = { python = 'python $fileName' } },
-    keys = {
-      { '<leader>rr', ':RunCode<CR>', desc = 'Run Code' },
-      { '<leader>rf', ':RunFile<CR>', desc = 'Run File' },
-      { '<leader>rp', ':RunProject<CR>', desc = 'Run Project' },
-      { '<leader>rc', ':RunClose<CR>', desc = 'Close Runner' },
-    },
   },
 }, {
   ui = {
