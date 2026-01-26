@@ -671,18 +671,6 @@ require('lazy').setup({
       signature = { enabled = true },
     },
   },
-  -- INFO: ai stuff
-  {
-    'zbirenbaum/copilot.lua',
-    cmd = 'Copilot',
-    event = 'InsertEnter',
-    config = function()
-      require('copilot').setup {
-        panel = { auto_refresh = true },
-      }
-      require 'copilot_grimoire'
-    end,
-  },
   -- INFO: other utilities
   { 'NMAC427/guess-indent.nvim', opts = {} },
   {
