@@ -13,7 +13,6 @@ vim.o.breakindent = true
 vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
-vim.o.signcolumn = 'yes'
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 vim.o.splitright = true
@@ -375,14 +374,6 @@ require('lazy').setup({
     'nvim-telescope/telescope-file-browser.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
   },
-  {
-    'chentoast/marks.nvim',
-    event = 'VeryLazy',
-    opts = {
-      builtin_marks = { "'", '"', '^', '.', '<', '>', '[', ']' },
-      sign_priority = { lower = 2, upper = 3, builtin = 1, bookmark = 4 },
-    },
-  },
   -- INFO: Treesitter stuff
   {
     'nvim-treesitter/nvim-treesitter',
@@ -410,27 +401,6 @@ require('lazy').setup({
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
-  },
-  {
-    'Bekaboo/dropbar.nvim',
-    config = function()
-      local dropbar_trunc = require 'dropbar_trunc'
-
-      require('dropbar.configs').set {
-        bar = {
-          enable = false,
-          sources = dropbar_trunc.dropbar_sources,
-        },
-        symbol = { -- i don't want this functionality
-          on_click = function() end,
-        },
-        sources = {
-          path = {
-            max_depth = 4,
-          },
-        },
-      }
-    end,
   },
   -- INFO: markdown and notes stuff
   {
@@ -956,7 +926,6 @@ require('lazy').setup({
                 return string.format('%%#Comment#%s%s%%#Normal#%s', dir, separator, filename)
               end,
             },
-            { 'dropbar and dropbar()' },
           },
           lualine_x = {
             {
