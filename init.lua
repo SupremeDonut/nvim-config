@@ -433,24 +433,6 @@ require('lazy').setup({
         vim.cmd('!typst compile %:p ' .. opts.args)
       end, { nargs = '?' })
     end,
-  },
-  {
-    'pxwg/math-conceal.nvim',
-    event = 'VeryLazy',
-    build = 'make luajit',
-    main = 'math-conceal',
-    opts = {
-      enabled = true,
-      conceal = {
-        'greek',
-        'script',
-        'math',
-        'font',
-        'delim',
-        'phy',
-      },
-      ft = { '*.tex', '*.md', '*.typ' },
-    },
   }, -- INFO: git stuff
   {
     'lewis6991/gitsigns.nvim',
