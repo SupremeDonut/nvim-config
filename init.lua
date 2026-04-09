@@ -83,7 +83,7 @@ vim.api.nvim_create_autocmd('BufRead', {
 })
 
 -- mini.nvim is always loaded (including in vscode)
-vim.pack.add({ 'https://github.com/nvim-mini/mini.nvim' })
+vim.pack.add { 'https://github.com/nvim-mini/mini.nvim' }
 require('mini.ai').setup { n_lines = 500 }
 require('mini.surround').setup()
 require('mini.move').setup()
@@ -104,10 +104,10 @@ vim.api.nvim_create_autocmd('BufEnter', {
     end
     -- Schedule so the buffer is fully set up before we replace it
     vim.schedule(function()
-      vim.pack.add({
+      vim.pack.add {
         'https://github.com/nvim-telescope/telescope.nvim',
         'https://github.com/nvim-telescope/telescope-file-browser.nvim',
-      })
+      }
       require('telescope').load_extension 'file_browser'
       -- Wipe the directory buffer
       if vim.api.nvim_buf_is_valid(args.buf) then
@@ -131,27 +131,27 @@ vim.api.nvim_create_autocmd('PackChanged', {
       return
     end
 
-    local dir = vim.fn.stdpath('data') .. '/site/pack/core/opt/' .. name
+    local dir = vim.fn.stdpath 'data' .. '/site/pack/core/opt/' .. name
 
     if name == 'nvim-treesitter' then
       if not ev.data.active then
-        vim.cmd.packadd('nvim-treesitter')
+        vim.cmd.packadd 'nvim-treesitter'
       end
-      vim.cmd('TSUpdate')
+      vim.cmd 'TSUpdate'
     elseif name == 'telescope-fzf-native.nvim' then
-      if vim.fn.executable('make') == 1 then
-        vim.fn.system({ 'make', '-C', dir })
+      if vim.fn.executable 'make' == 1 then
+        vim.fn.system { 'make', '-C', dir }
       end
     elseif name == 'markdown-preview.nvim' then
-      vim.fn.system({ 'yarn', 'install', '--cwd', dir .. '/app' })
+      vim.fn.system { 'yarn', 'install', '--cwd', dir .. '/app' }
     elseif name == 'LuaSnip' then
-      vim.fn.system({ 'make', 'install_jsregexp', '-C', dir })
+      vim.fn.system { 'make', 'install_jsregexp', '-C', dir }
     end
   end,
 })
 
 -- INFO: All plugins (eagerly loaded)
-vim.pack.add({
+vim.pack.add {
   -- theming
   'https://github.com/catppuccin/nvim',
   'https://github.com/folke/snacks.nvim',
@@ -165,7 +165,7 @@ vim.pack.add({
   'https://github.com/L3MON4D3/LuaSnip',
   'https://github.com/rafamadriz/friendly-snippets',
   'https://github.com/folke/lazydev.nvim',
-  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+  { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range '1.x' },
   -- treesitter
   'https://github.com/nvim-treesitter/nvim-treesitter',
   -- markdown and notes
@@ -176,7 +176,7 @@ vim.pack.add({
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/folke/todo-comments.nvim',
   'https://github.com/nvim-tree/nvim-web-devicons',
-})
+}
 
 -- INFO: Theming configuration
 
@@ -319,7 +319,6 @@ require('snacks').setup {
             require('snacks.dashboard').pick()
           end,
         },
-        { section = 'startup', icon = '' },
       }
       return list
     end,
@@ -675,7 +674,7 @@ require('todo-comments').setup { signs = false }
 -- INFO: Lazy-loaded plugins (deferred after startup)
 vim.schedule(function()
   -- Telescope and dependencies
-  vim.pack.add({
+  vim.pack.add {
     'https://github.com/nvim-telescope/telescope.nvim',
     'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
     'https://github.com/nvim-telescope/telescope-ui-select.nvim',
@@ -688,7 +687,7 @@ vim.schedule(function()
     'https://github.com/stevearc/conform.nvim',
     -- code runner
     'https://github.com/CRAG666/code_runner.nvim',
-  })
+  }
 
   -- Telescope setup
   require('telescope').setup {
@@ -807,7 +806,7 @@ end)
 vim.api.nvim_create_autocmd('BufReadPre', {
   once = true,
   callback = function()
-    vim.pack.add({ 'https://github.com/catgoose/nvim-colorizer.lua' })
+    vim.pack.add { 'https://github.com/catgoose/nvim-colorizer.lua' }
     require('colorizer').setup {
       lazy_load = true,
       user_default_options = {
@@ -822,7 +821,7 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'markdown',
   once = true,
   callback = function()
-    vim.pack.add({ 'https://github.com/iamcco/markdown-preview.nvim' })
+    vim.pack.add { 'https://github.com/iamcco/markdown-preview.nvim' }
     vim.g.mkdp_filetypes = { 'markdown' }
   end,
 })
@@ -831,7 +830,7 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'typst',
   once = true,
   callback = function()
-    vim.pack.add({ { src = 'https://github.com/chomosuke/typst-preview.nvim', version = vim.version.range('1.x') } })
+    vim.pack.add { { src = 'https://github.com/chomosuke/typst-preview.nvim', version = vim.version.range '1.x' } }
     require('typst-preview').setup {}
     vim.api.nvim_create_user_command('TypstCompile', function(opts)
       vim.cmd('!typst compile %:p ' .. opts.args)
@@ -843,7 +842,7 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('InsertEnter', {
   once = true,
   callback = function()
-    vim.pack.add({ 'https://github.com/zbirenbaum/copilot.lua' })
+    vim.pack.add { 'https://github.com/zbirenbaum/copilot.lua' }
     require 'copilot_grimoire'
   end,
 })
