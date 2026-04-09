@@ -9,7 +9,6 @@ vim.g.have_nerd_font = true
 
 vim.o.number = true
 vim.o.relativenumber = true
-vim.o.mouse = 'a'
 vim.o.showmode = false
 vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
@@ -56,15 +55,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Restore cursor position on open, if possible
-local function table_contains(t, e)
-  for _, v in pairs(t) do
-    if v == e then
-      return true
-    end
-  end
-  return false
-end
-
 vim.api.nvim_create_autocmd('BufRead', {
   callback = function(args)
     local ignored_fts = { 'gitrebase', 'gitcommit', 'hgcommit', 'svn', 'xxd' }
@@ -74,7 +64,7 @@ vim.api.nvim_create_autocmd('BufRead', {
       callback = function()
         local ft = vim.bo[args.buf].filetype
         local row = vim.api.nvim_buf_get_mark(args.buf, '"')[1]
-        if not table_contains(ignored_fts, ft) and row > 0 and row <= vim.api.nvim_buf_line_count(args.buf) then
+        if not vim.tbl_contains(ignored_fts, ft) and row > 0 and row <= vim.api.nvim_buf_line_count(args.buf) then
           vim.api.nvim_feedkeys([[g`"]], 'nx', false)
         end
       end,
