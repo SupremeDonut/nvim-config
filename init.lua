@@ -203,7 +203,7 @@ require('lazy').setup({
           local fd = assert(vim.uv.fs_open(projectpath, 'r+', 384))
           local stat = assert(vim.uv.fs_fstat(fd))
           local data = assert(vim.uv.fs_read(fd, stat.size, 0))
-          local before = assert(loadstring(data))
+          local before = assert(load(data))
           local plist = before()
 
           if plist and #plist > 10 then
@@ -378,9 +378,8 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs',
-    opts = {
-      ensure_installed = {
+    init = function()
+      local ensureInstalled = {
         'bash',
         'c',
         'diff',
@@ -392,15 +391,25 @@ require('lazy').setup({
         'query',
         'vim',
         'vimdoc',
-      },
-      auto_install = true,
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { 'ruby' },
-        disable = { 'csv' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
+      }
+      local alreadyInstalled = require('nvim-treesitter.config').get_installed()
+      local parsersToInstall = vim
+        .iter(ensureInstalled)
+        :filter(function(parser)
+          return not vim.tbl_contains(alreadyInstalled, parser)
+        end)
+        :totable()
+      require('nvim-treesitter').install(parsersToInstall)
+      vim.api.nvim_create_autocmd('FileType', {
+
+        callback = function()
+          -- Enable treesitter highlighting and disable regex syntax
+          pcall(vim.treesitter.start)
+          -- Enable treesitter-based indentation
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
+    end,
   },
   -- INFO: markdown and notes stuff
   {
