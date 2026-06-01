@@ -130,7 +130,10 @@ vim.api.nvim_create_autocmd('PackChanged', {
       vim.cmd 'TSUpdate'
     elseif name == 'telescope-fzf-native.nvim' then
       if vim.fn.executable 'make' == 1 then
-        vim.fn.system { 'make', '-C', dir }
+        local out = vim.fn.system { 'make', '-C', dir }
+        if vim.v.shell_error ~= 0 then
+          vim.notify('fzf-native build failed:\n' .. out, vim.log.levels.ERROR)
+        end
       end
     elseif name == 'markdown-preview.nvim' then
       vim.fn.system { 'yarn', 'install', '--cwd', dir .. '/app' }
@@ -605,7 +608,9 @@ local presets = require 'markview.presets'
 require('markview').setup {
   experimental = { check_rtp_message = false },
   markdown = { tables = presets.tables.single },
-  typst = { enable = false },
+  preview = {
+    filetypes = { 'markdown', 'quarto', 'rmd', 'asciidoc' },
+  },
 }
 
 -- INFO: Utilities

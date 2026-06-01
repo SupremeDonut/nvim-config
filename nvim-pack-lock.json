@@ -117,6 +117,11 @@
       "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
       "src": "https://github.com/folke/todo-comments.nvim"
     },
+    "typst-preview.nvim": {
+      "rev": "325036ee145ca51d9efb145c09ac16bce3bc8b7d",
+      "src": "https://github.com/chomosuke/typst-preview.nvim",
+      "version": "1.0.0 - 2.0.0"
+    },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
       "src": "https://github.com/folke/which-key.nvim"
