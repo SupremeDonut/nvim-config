@@ -85,32 +85,18 @@ if vim.g.vscode then
   return
 end
 
--- Hijack directory opens with telescope file_browser
-vim.api.nvim_create_autocmd('BufEnter', {
-  callback = function(args)
-    local bufname = vim.api.nvim_buf_get_name(args.buf)
-    if vim.fn.isdirectory(bufname) ~= 1 then
-      return
-    end
-    -- Schedule so the buffer is fully set up before we replace it
-    vim.schedule(function()
-      vim.pack.add {
-        'https://github.com/nvim-telescope/telescope.nvim',
-        'https://github.com/nvim-telescope/telescope-file-browser.nvim',
-      }
-      require('telescope').load_extension 'file_browser'
-      -- Wipe the directory buffer
-      if vim.api.nvim_buf_is_valid(args.buf) then
-        vim.api.nvim_buf_delete(args.buf, { force = true })
-      end
-      require('telescope').extensions.file_browser.file_browser {
-        path = bufname,
-        respect_gitignore = false,
-        hidden = true,
-      }
-    end)
-  end,
-})
+-- yazi.nvim: file manager, replaces netrw for directory opens
+vim.pack.add {
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/mikavilpas/yazi.nvim',
+}
+require('yazi').setup {
+  open_for_directories = true,
+}
+vim.keymap.set({ 'n', 'v' }, '<leader>-', '<cmd>Yazi<CR>', { desc = 'Open yazi at the current file' })
+vim.keymap.set('n', '<leader>cw', '<cmd>Yazi cwd<CR>', { desc = 'Open yazi in nvim working directory' })
+vim.keymap.set('n', '<leader>fb', '<cmd>Yazi<CR>', { desc = '[F]ile [B]rowser (yazi)' })
+vim.keymap.set('n', '<c-up>', '<cmd>Yazi toggle<CR>', { desc = 'Resume last yazi session' })
 
 -- PackChanged hooks for plugins with build steps
 vim.api.nvim_create_autocmd('PackChanged', {
@@ -674,7 +660,6 @@ vim.schedule(function()
     'https://github.com/nvim-telescope/telescope.nvim',
     'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
     'https://github.com/nvim-telescope/telescope-ui-select.nvim',
-    'https://github.com/nvim-telescope/telescope-file-browser.nvim',
     -- indent guides
     'https://github.com/lukas-reineke/indent-blankline.nvim',
     -- folding
@@ -709,19 +694,11 @@ vim.schedule(function()
       ['ui-select'] = {
         require('telescope.themes').get_dropdown(),
       },
-      file_browser = {
-        hijack_netrw = true,
-        hidden = {
-          file_browser = true,
-          folder_browser = true,
-        },
-      },
     },
   }
 
   require('telescope').load_extension 'fzf'
   require('telescope').load_extension 'ui-select'
-  require('telescope').load_extension 'file_browser'
 
   local builtin = require 'telescope.builtin'
   vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -749,8 +726,6 @@ vim.schedule(function()
   vim.keymap.set('n', '<leader>sn', function()
     builtin.find_files { cwd = vim.fn.stdpath 'config' }
   end, { desc = '[S]earch [N]eovim files' })
-
-  vim.keymap.set('n', '<leader>fb', '<cmd>Telescope file_browser<CR>', { desc = 'Telescope [F]ile [B]rowser' })
 
   local custom_pickers = require 'custom_pickers'
   vim.keymap.set('n', '<leader>fe', custom_pickers.emoji_picker, { desc = '[F]ind [E]mojis' })

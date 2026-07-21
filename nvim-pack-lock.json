@@ -49,10 +49,6 @@
       "rev": "f5d2a8570f8b736ddb9bb4be504355bcd6e15ec8",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
-    "markdown-preview.nvim": {
-      "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
-      "src": "https://github.com/iamcco/markdown-preview.nvim"
-    },
     "markview.nvim": {
       "rev": "1861f959599ae03cfd59f56222a542035b0cd947",
       "src": "https://github.com/OXY2DEV/markview.nvim"
@@ -118,13 +114,17 @@
       "src": "https://github.com/folke/todo-comments.nvim"
     },
     "typst-preview.nvim": {
-      "rev": "325036ee145ca51d9efb145c09ac16bce3bc8b7d",
+      "rev": "1c2e19486397be1c580b560fc50ee36abe329c46",
       "src": "https://github.com/chomosuke/typst-preview.nvim",
       "version": "1.0.0 - 2.0.0"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
       "src": "https://github.com/folke/which-key.nvim"
+    },
+    "yazi.nvim": {
+      "rev": "41de141381b4046f565d28f8a1ac78468d74fce9",
+      "src": "https://github.com/mikavilpas/yazi.nvim"
     }
   }
 }
