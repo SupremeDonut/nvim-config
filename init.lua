@@ -149,6 +149,7 @@ vim.pack.add {
   'https://github.com/nvim-treesitter/nvim-treesitter',
   -- markdown and notes
   'https://github.com/OXY2DEV/markview.nvim',
+  'https://github.com/lervag/vimtex',
   -- utilities
   'https://github.com/NMAC427/guess-indent.nvim',
   'https://github.com/folke/which-key.nvim',
@@ -599,6 +600,8 @@ require('markview').setup {
     filetypes = { 'markdown', 'quarto', 'rmd', 'asciidoc' },
   },
 }
+
+vim.g.vimtex_view_method = 'zathura'
 
 -- INFO: Utilities
 require('guess-indent').setup {}
